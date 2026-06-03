@@ -1,82 +1,82 @@
-# Blender STEP AP214 Importer
+# Blender STEP AP214 匯入器
 
-Blender addon for importing STEP AP214/203 files with full B-Rep quality using Open CASCADE (OCC).
+使用 Open CASCADE (OCC) 進行真正的 B-Rep 幾何細分，在 Blender 中高品質匯入 STEP AP214/203 檔案。
 
-## Features
+## 功能特色
 
-- ✅ True B-Rep tessellation via Open CASCADE — cylinders, splines, and complex surfaces render correctly
-- ✅ Color preservation from STEP XCAF metadata
-- ✅ Part structure → Blender Collection hierarchy
-- ✅ Adjustable tessellation quality (linear + angular deflection)
-- ✅ Cross-platform: macOS / Windows / Linux
-- ✅ Blender 3.x ~ 4.x (auto-detects Python version)
-- ✅ Tested with SolidWorks / Creo / CATIA output
+- ✅ 透過 Open CASCADE 進行真正的 B-Rep 細分——圓柱、曲線、複雜曲面都能正確渲染
+- ✅ 保留 STEP XCAF 中的顏色資訊
+- ✅ Part 結構對應 Blender Collection 階層
+- ✅ 可調整細分品質（線性偏差 + 角度偏差）
+- ✅ 跨平台支援：macOS / Windows / Linux
+- ✅ 支援 Blender 3.x ~ 4.x（自動偵測 Python 版本）
+- ✅ 已測試：SolidWorks / Creo / CATIA 輸出檔案
 
-## Prerequisites
+## 前置需求
 
-Install `cadquery` (Open CASCADE) into Blender's Python.
+需要將 `cadquery`（Open CASCADE）安裝到 Blender 的 Python 環境中。
 
-### Option A — Auto installer (recommended)
+### 方式 A — 自動安裝腳本（建議）
 
 ```bash
 python3 install_dependencies.py
 ```
 
-The script automatically finds all Blender installations on your machine and installs the dependency into the correct Python environment. On Windows, double-click the script to run it.
+腳本會自動找到電腦上所有 Blender 安裝位置，並安裝到對應的 Python 環境。Windows 使用者可直接雙擊執行。
 
-### Option B — Manual
+### 方式 B — 手動安裝
 
-Find your Blender Python and run:
+找到你的 Blender Python 路徑後執行：
 
-| OS | Path |
-|----|------|
+| 作業系統 | 指令範例 |
+|---------|---------|
 | macOS | `/Applications/Blender.app/Contents/Resources/4.3/python/bin/python3.11 -m pip install cadquery` |
 | Windows | `"C:\Program Files\Blender Foundation\Blender 4.3\4.3\python\bin\python.exe" -m pip install cadquery` |
 | Linux | `/usr/share/blender/4.3/python/bin/python3.11 -m pip install cadquery` |
 
-> Adjust the version number to match your Blender installation.
+> 請依照你的 Blender 版本調整路徑中的版本號。
 
-## Installation
+## 安裝步驟
 
-1. Download `import_step_ap214.py`
-2. In Blender: **Edit > Preferences > Add-ons > Install** → select the file → enable it
-3. Import via **File > Import > STEP AP214 (.step/.stp)**
+1. 下載 `import_step_ap214.py`
+2. 開啟 Blender：**Edit > Preferences > Add-ons > Install** → 選擇檔案 → 啟用
+3. 透過 **File > Import > STEP AP214 (.step/.stp)** 匯入
 
-## Usage
+## 使用說明
 
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| Scale | `0.001` | mm → m conversion (SolidWorks/CATIA default is mm) |
-| Linear deflection | `0.05` mm | Smaller = finer mesh, slower import |
-| Angular deflection | `0.3` rad | Smaller = smoother curves |
+| 參數 | 預設值 | 說明 |
+|------|--------|------|
+| 縮放比例 | `0.001` | mm → m 換算（SolidWorks/CATIA 預設單位為 mm） |
+| 線性精度 | `0.05` mm | 數值越小 mesh 越細緻，匯入越慢 |
+| 角度精度 | `0.3` rad | 數值越小曲面越圓滑 |
 
-**High quality render:** linear `0.02`, angular `0.1`
-**Fast preview:** linear `0.1`, angular `0.5`
+**高品質渲染：** 線性 `0.02`，角度 `0.1`
+**快速預覽：** 線性 `0.1`，角度 `0.5`
 
-## How it works
+## 運作原理
 
-Uses `cadquery-ocp` (Open CASCADE Python bindings) to:
+使用 `cadquery-ocp`（Open CASCADE Python 綁定）：
 
-1. Read STEP via XCAF — preserves color and part name metadata
-2. Tessellate B-Rep geometry with `BRepMesh_IncrementalMesh`
-3. Build Blender mesh objects with correct face normals, materials, and Collection hierarchy
+1. 透過 XCAF 讀取 STEP——保留顏色與 Part 名稱
+2. 以 `BRepMesh_IncrementalMesh` 對 B-Rep 幾何進行細分
+3. 建立 Blender mesh 物件，包含正確的面法線、材質與 Collection 階層
 
-This produces significantly better results than pure-Python STEP parsers, which can only approximate curved surfaces (cylinders, splines, cones) using polygon endpoints.
+相較於純 Python 的 STEP 解析器（只能以多邊形端點近似曲面），本插件能產生顯著更高品質的結果。
 
-## Compatibility
+## 相容性
 
-| | Supported |
+| | 支援範圍 |
 |---|---|
-| OS | macOS, Windows, Linux |
-| Blender | 3.x ~ 4.x |
-| Python | 3.10, 3.11, 3.12 |
-| STEP formats | AP203, AP214, AP242 |
-| CAD sources | SolidWorks, Creo, CATIA V5, NX, FreeCAD |
+| 作業系統 | macOS、Windows、Linux |
+| Blender 版本 | 3.x ~ 4.x |
+| Python 版本 | 3.10、3.11、3.12 |
+| STEP 格式 | AP203、AP214、AP242 |
+| CAD 來源 | SolidWorks、Creo、CATIA V5、NX、FreeCAD |
 
-> ⚠️ `cadquery-ocp` does not have a prebuilt wheel for ARM Windows (Surface Pro X etc.). Intel/AMD Windows works normally.
+> ⚠️ `cadquery-ocp` 目前沒有 ARM Windows（Surface Pro X 等）的預編譯套件，Intel/AMD Windows 正常運作。
 
-## Known limitations
+## 已知限制
 
-- Geometry is tessellated (polygon mesh), not parametric B-Rep — editing in Creo/NX after round-trip is not supported
-- Assembly hierarchy is flattened into Blender Collections (no transform instances yet)
-- B-Spline surfaces are tessellated accurately but control points are not exposed
+- 幾何以細分 mesh 輸出（非參數化 B-Rep）——不支援匯出後在 Creo/NX 中編輯特徵
+- Assembly 階層會平展為 Blender Collection（尚未支援變換實例）
+- B-Spline 曲面可精確細分，但不會開放控制點
